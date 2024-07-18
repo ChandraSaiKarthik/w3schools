@@ -1,0 +1,18 @@
+USE master;
+GO
+
+IF NOT EXISTS (SELECT name FROM sys.databases WHERE name = 'w3schools')
+BEGIN
+	DECLARE @SQLcmd NVARCHAR(4000);
+	SET @SQLcmd = N'
+	CREATE DATABASE w3schools
+	ON
+	PRIMARY --PRIMARY FileGroup is Default Group
+		(NAME=w3schools_data, FILENAME=''C:\SQL\MSSQL\'+CAST(SERVERPROPERTY('ProductVersion') AS VARCHAR(4))+'\DATA\w3schools_data.mdf'', SIZE=8192KB, FILEGROWTH=2048KB),
+	FILEGROUP SECONDARY --SECONDARY FileGroup will be Created Automatically
+		(NAME=w3schools_data2, FILENAME=''C:\SQL\MSSQL\'+CAST(SERVERPROPERTY('ProductVersion') AS VARCHAR(4))+'\DATA\w3schools_data2.ndf'', SIZE=8192KB, FILEGROWTH=2048KB)
+	LOG ON
+		(NAME=w3schools_log, FILENAME=''C:\SQL\MSSQL\'+CAST(SERVERPROPERTY('ProductVersion') AS VARCHAR(4))+'\LOG\w3schools_log.ldf'', SIZE=8192KB, FILEGROWTH=2048KB);';
+	EXEC sys.sp_executesql @command = @SQLcmd;
+END;
+GO
