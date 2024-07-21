@@ -1,6 +1,19 @@
 USE master;
 GO
 
+EXEC sys.sp_configure @configname = 'show advanced options', @configvalue = '1'; RECONFIGURE;
+EXEC sys.sp_configure @configname = 'xp_cmdshell', @configvalue = '1'; RECONFIGURE;
+EXEC sys.sp_configure @configname = 'show advanced options', @configvalue = '0'; RECONFIGURE;
+
+DECLARE @cmd NVARCHAR(4000);
+
+SET @cmd = 'mkdir "C:\SQL\MSSQL\' + CAST(SERVERPROPERTY('ProductVersion') AS VARCHAR(4)) + '\DATA\"';
+EXEC sys.xp_cmdshell @command = @cmd;
+
+SET @cmd = 'mkdir "C:\SQL\MSSQL\' + CAST(SERVERPROPERTY('ProductVersion') AS VARCHAR(4)) + '\LOG\"';
+EXEC sys.xp_cmdshell @command = @cmd;
+GO
+
 IF NOT EXISTS (SELECT name FROM sys.databases WHERE name = '<<Database>>')
 BEGIN
 	DECLARE @SQLcmd NVARCHAR(4000);
