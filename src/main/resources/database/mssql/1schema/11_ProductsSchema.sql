@@ -1,3 +1,6 @@
+USE [<<Database>>];
+GO
+
 IF NOT EXISTS (SELECT * FROM sys.schemas WHERE name = N'product')
 	EXECUTE('CREATE SCHEMA [product]');
 GO
