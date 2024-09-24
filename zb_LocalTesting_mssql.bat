@@ -3,7 +3,7 @@
 setlocal
 
 set "mssqlsource=C:\GitHub\w3schools\src\main\resources\database\mssql"
-set "mssqltarget=C:\zProjects\w3schools-develop\src\main\resources\database\mssql"
+set "mssqltarget=C:\zProjects\w3schools-local\src\main\resources\database\mssql"
 
 :: Step 1: Deleting the target folder if it exists
 echo Deleting folder "%mssqltarget%" if exists...
@@ -34,12 +34,12 @@ if exist "C:\GitHub\SQLsnippets\Deployment\pymssql_deploy.py" (
 echo.
 pause
 
-cd "C:\zProjects\w3schools-develop\src\main\resources\database\mssql\"
+cd "C:\zProjects\w3schools-local\src\main\resources\database\mssql\"
 fill_in_placeholders.sh
 echo.
 
-cd "C:\zProjects\w3schools-develop\src\main\resources\database\mssql"
-echo Executing all SQL scripts in Folder "C:\zProjects\w3schools-develop\src\main\resources\database\mssql" using pymssql_deploy.py...
+cd "C:\zProjects\w3schools-local\src\main\resources\database\mssql"
+echo Executing all SQL scripts in Folder "C:\zProjects\w3schools-local\src\main\resources\database\mssql" using pymssql_deploy.py...
 python pymssql_deploy.py --DB_HostName="localhost" --DB_UserName="karthik" --DB_Password="asdf1234" --DB_Name="w3schools"
 echo.
 
