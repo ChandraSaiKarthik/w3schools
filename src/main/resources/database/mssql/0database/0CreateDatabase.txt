@@ -1,0 +1,33 @@
+USE master;
+GO
+
+EXEC sys.sp_configure @configname = 'show advanced options', @configvalue = '1'; RECONFIGURE;
+EXEC sys.sp_configure @configname = 'xp_cmdshell', @configvalue = '1'; RECONFIGURE;
+EXEC sys.sp_configure @configname = 'show advanced options', @configvalue = '0'; RECONFIGURE;
+
+DECLARE @cmd NVARCHAR(4000);
+
+SET @cmd = 'mkdir "C:\SQL\MSSQL\' + CAST(SERVERPROPERTY('ProductVersion') AS VARCHAR(4)) + '\DATA\"';
+EXEC sys.xp_cmdshell @command = @cmd;
+
+SET @cmd = 'mkdir "C:\SQL\MSSQL\' + CAST(SERVERPROPERTY('ProductVersion') AS VARCHAR(4)) + '\LOG\"';
+EXEC sys.xp_cmdshell @command = @cmd;
+GO
+
+IF NOT EXISTS (SELECT name FROM sys.databases WHERE name = '<<Database>>')
+BEGIN
+	DECLARE @SQLcmd NVARCHAR(4000);
+	SET @SQLcmd = N'
+	CREATE DATABASE [<<Database>>]
+	ON
+	PRIMARY --PRIMARY FileGroup is Default Group
+		(NAME=<<Database>>_data, FILENAME=''C:\SQL\MSSQL\'+CAST(SERVERPROPERTY('ProductVersion') AS VARCHAR(4))+'\DATA\<<Database>>_data.mdf'', SIZE=8192KB, FILEGROWTH=2048KB),
+	FILEGROUP SECONDARY --SECONDARY FileGroup will be Created Automatically
+		(NAME=<<Database>>_data2, FILENAME=''C:\SQL\MSSQL\'+CAST(SERVERPROPERTY('ProductVersion') AS VARCHAR(4))+'\DATA\<<Database>>_data2.ndf'', SIZE=8192KB, FILEGROWTH=2048KB),
+	FILEGROUP TERTIARY --TERTIARY FileGroup will be Created Automatically
+		(NAME=<<Database>>_data3, FILENAME=''C:\SQL\MSSQL\'+CAST(SERVERPROPERTY('ProductVersion') AS VARCHAR(4))+'\DATA\<<Database>>_data3.ndf'', SIZE=8192KB, FILEGROWTH=2048KB)
+	LOG ON
+		(NAME=<<Database>>_log, FILENAME=''C:\SQL\MSSQL\'+CAST(SERVERPROPERTY('ProductVersion') AS VARCHAR(4))+'\LOG\<<Database>>_log.ldf'', SIZE=8192KB, FILEGROWTH=2048KB);';
+	EXEC sys.sp_executesql @command = @SQLcmd;
+END;
+GO
