@@ -1,0 +1,378 @@
+MERGE INTO
+    w3schools.dbo.OrderDetails AS T
+USING
+    w3schools_copy.dbo.OrderDetails AS S
+ON  T.OrderDetailID = S.OrderDetailID 
+WHEN NOT MATCHED BY SOURCE THEN
+    DELETE;
+
+MERGE INTO
+    w3schools.dbo.Orders AS T
+USING
+    w3schools_copy.dbo.Orders AS S
+ON  T.OrderID = S.OrderID 
+WHEN NOT MATCHED BY SOURCE THEN
+    DELETE;
+
+MERGE INTO
+    w3schools.dbo.Products AS T
+USING
+    w3schools_copy.dbo.Products AS S
+ON  T.ProductID = S.ProductID 
+WHEN NOT MATCHED BY SOURCE THEN
+    DELETE;
+
+MERGE INTO
+    w3schools.dbo.Categories AS T
+USING
+    w3schools_copy.dbo.Categories AS S
+ON  T.CategoryID = S.CategoryID 
+WHEN NOT MATCHED BY SOURCE THEN
+    DELETE;
+
+MERGE INTO
+    w3schools.dbo.Customers AS T
+USING
+    w3schools_copy.dbo.Customers AS S
+ON  T.CustomerID = S.CustomerID 
+WHEN NOT MATCHED BY SOURCE THEN
+    DELETE;
+
+MERGE INTO
+    w3schools.dbo.Employees AS T
+USING
+    w3schools_copy.dbo.Employees AS S
+ON  T.EmployeeID = S.EmployeeID 
+WHEN NOT MATCHED BY SOURCE THEN
+    DELETE;
+
+MERGE INTO
+    w3schools.dbo.Shippers AS T
+USING
+    w3schools_copy.dbo.Shippers AS S
+ON  T.ShipperID = S.ShipperID 
+WHEN NOT MATCHED BY SOURCE THEN
+    DELETE;
+
+MERGE INTO
+    w3schools.dbo.Suppliers AS T
+USING
+    w3schools_copy.dbo.Suppliers AS S
+ON  T.SupplierID = S.SupplierID 
+WHEN NOT MATCHED BY SOURCE THEN
+    DELETE;
+
+SET IDENTITY_INSERT w3schools.dbo.Categories ON;
+MERGE INTO
+    w3schools.dbo.Categories AS T
+USING
+    w3schools_copy.dbo.Categories AS S
+ON  T.CategoryID = S.CategoryID 
+WHEN NOT MATCHED BY TARGET THEN
+    INSERT
+        (
+            CategoryName,
+            Description,
+            CategoryID
+         )
+    VALUES
+        (
+            S.CategoryName,
+            S.Description,
+            S.CategoryID
+         )
+;
+SET IDENTITY_INSERT w3schools.dbo.Categories OFF;
+
+SET IDENTITY_INSERT w3schools.dbo.Customers ON;
+MERGE INTO
+    w3schools.dbo.Customers AS T
+USING
+    w3schools_copy.dbo.Customers AS S
+ON  T.CustomerID = S.CustomerID 
+WHEN NOT MATCHED BY TARGET THEN
+    INSERT
+        (
+            CustomerName,
+            ContactName,
+            Address,
+            City,
+            PostalCode,
+            Country,
+            CustomerID
+         )
+    VALUES
+        (
+            S.CustomerName,
+            S.ContactName,
+            S.Address,
+            S.City,
+            S.PostalCode,
+            S.Country,
+            S.CustomerID
+         );
+SET IDENTITY_INSERT w3schools.dbo.Customers OFF;
+
+SET IDENTITY_INSERT w3schools.dbo.Employees ON;
+MERGE INTO
+    w3schools.dbo.Employees AS T
+USING
+    w3schools_copy.dbo.Employees AS S
+ON  T.EmployeeID = S.EmployeeID 
+WHEN NOT MATCHED BY TARGET THEN
+    INSERT
+        (
+            LastName,
+            FirstName,
+            BirthDate,
+            Photo,
+            Notes,
+            EmployeeID
+         )
+    VALUES
+        (
+            S.LastName,
+            S.FirstName,
+            S.BirthDate,
+            S.Photo,
+            S.Notes,
+            S.EmployeeID
+         );
+SET IDENTITY_INSERT w3schools.dbo.Employees OFF;
+
+SET IDENTITY_INSERT w3schools.dbo.Shippers ON;
+MERGE INTO
+    w3schools.dbo.Shippers AS T
+USING
+    w3schools_copy.dbo.Shippers AS S
+ON  T.ShipperID = S.ShipperID 
+WHEN NOT MATCHED BY TARGET THEN
+    INSERT
+        (
+            ShipperName,
+            Phone,
+            ShipperID
+         )
+    VALUES
+        (
+            S.ShipperName,
+            S.Phone,
+            S.ShipperID
+         )
+;
+SET IDENTITY_INSERT w3schools.dbo.Shippers OFF;
+
+SET IDENTITY_INSERT w3schools.dbo.Suppliers ON;
+MERGE INTO
+    w3schools.dbo.Suppliers AS T
+USING
+    w3schools_copy.dbo.Suppliers AS S
+ON  T.SupplierID = S.SupplierID 
+WHEN NOT MATCHED BY TARGET THEN
+    INSERT
+        (
+            SupplierName,
+            ContactName,
+            Address,
+            City,
+            PostalCode,
+            Country,
+            SupplierID
+         )
+    VALUES
+        (
+            S.SupplierName,
+            S.ContactName,
+            S.Address,
+            S.City,
+            S.PostalCode,
+            S.Country,
+            S.SupplierID
+         );
+SET IDENTITY_INSERT w3schools.dbo.Suppliers OFF;
+
+SET IDENTITY_INSERT w3schools.dbo.Orders ON;
+MERGE INTO
+    w3schools.dbo.Orders AS T
+USING
+    w3schools_copy.dbo.Orders AS S
+ON  T.OrderID = S.OrderID 
+WHEN NOT MATCHED BY TARGET THEN
+    INSERT
+        (
+            CustomerID,
+            EmployeeID,
+            OrderDate,
+            ShipperID,
+            OrderStatus,
+            OrderID
+         )
+    VALUES
+        (
+            S.CustomerID,
+            S.EmployeeID,
+            S.OrderDate,
+            S.ShipperID,
+            S.OrderStatus,
+            S.OrderID
+         );
+SET IDENTITY_INSERT w3schools.dbo.Orders OFF;
+
+SET IDENTITY_INSERT w3schools.dbo.Products ON;
+MERGE INTO
+    w3schools.dbo.Products AS T
+USING
+    w3schools_copy.dbo.Products AS S
+ON  T.ProductID = S.ProductID 
+WHEN NOT MATCHED BY TARGET THEN
+    INSERT
+        (
+            ProductName,
+            SupplierID,
+            CategoryID,
+            Unit,
+            Price,
+            ProductStatus,
+            ProductID
+         )
+    VALUES
+        (
+            S.ProductName,
+            S.SupplierID,
+            S.CategoryID,
+            S.Unit,
+            S.Price,
+            S.ProductStatus,
+            S.ProductID
+         );
+SET IDENTITY_INSERT w3schools.dbo.Products OFF;
+
+SET IDENTITY_INSERT w3schools.dbo.OrderDetails ON;
+MERGE INTO
+    w3schools.dbo.OrderDetails AS T
+USING
+    w3schools_copy.dbo.OrderDetails AS S
+ON  T.OrderDetailID = S.OrderDetailID 
+WHEN NOT MATCHED BY TARGET THEN
+    INSERT
+        (
+            OrderID,
+            ProductID,
+            Quantity,
+            OrderDetailID
+         )
+    VALUES
+        (
+            S.OrderID,
+            S.ProductID,
+            S.Quantity,
+            S.OrderDetailID
+         );
+SET IDENTITY_INSERT w3schools.dbo.OrderDetails OFF;
+
+MERGE INTO
+    w3schools.dbo.Categories AS T
+USING
+    w3schools_copy.dbo.Categories AS S
+ON  T.CategoryID = S.CategoryID
+WHEN MATCHED THEN
+    UPDATE
+    SET
+        T.CategoryName = S.CategoryName,
+        T.Description = S.Description;
+
+MERGE INTO
+    w3schools.dbo.Customers AS T
+USING
+    w3schools_copy.dbo.Customers AS S
+ON  T.CustomerID = S.CustomerID
+WHEN MATCHED THEN
+    UPDATE
+    SET
+        T.CustomerName = S.CustomerName,
+        T.ContactName = S.ContactName,
+        T.Address = S.Address,
+        T.City = S.City,
+        T.PostalCode = S.PostalCode,
+        T.Country = S.Country;
+
+MERGE INTO
+    w3schools.dbo.Employees AS T
+USING
+    w3schools_copy.dbo.Employees AS S
+ON  T.EmployeeID = S.EmployeeID
+WHEN MATCHED THEN
+    UPDATE
+    SET
+        T.LastName = S.LastName,
+        T.FirstName = S.FirstName,
+        T.BirthDate = S.BirthDate,
+        T.Photo = S.Photo,
+        T.Notes = S.Notes;
+
+MERGE INTO
+    w3schools.dbo.Shippers AS T
+USING
+    w3schools_copy.dbo.Shippers AS S
+ON  T.ShipperID = S.ShipperID
+WHEN MATCHED THEN
+    UPDATE
+    SET
+        T.ShipperName = S.ShipperName,
+        T.Phone = S.Phone;
+
+MERGE INTO
+    w3schools.dbo.Suppliers AS T
+USING
+    w3schools_copy.dbo.Suppliers AS S
+ON  T.SupplierID = S.SupplierID
+WHEN MATCHED THEN
+    UPDATE
+    SET
+        T.SupplierName = S.SupplierName,
+        T.ContactName = S.ContactName,
+        T.Address = S.Address,
+        T.City = S.City,
+        T.PostalCode = S.PostalCode,
+        T.Country = S.Country;
+
+MERGE INTO
+    w3schools.dbo.Orders AS T
+USING
+    w3schools_copy.dbo.Orders AS S
+ON  T.OrderID = S.OrderID
+WHEN MATCHED THEN
+    UPDATE
+    SET
+        T.CustomerID = S.CustomerID,
+        T.EmployeeID = S.EmployeeID,
+        T.OrderDate = S.OrderDate,
+        T.ShipperID = S.ShipperID,
+        T.OrderStatus = S.OrderStatus;
+
+MERGE INTO
+    w3schools.dbo.Products AS T
+USING
+    w3schools_copy.dbo.Products AS S
+ON  T.ProductID = S.ProductID
+WHEN MATCHED THEN
+    UPDATE
+    SET
+        T.ProductName = S.ProductName,
+        T.SupplierID = S.SupplierID,
+        T.CategoryID = S.CategoryID,
+        T.Unit = S.Unit,
+        T.Price = S.Price,
+        T.ProductStatus = S.ProductStatus;
+
+MERGE INTO
+    w3schools.dbo.OrderDetails AS T
+USING
+    w3schools_copy.dbo.OrderDetails AS S
+ON  T.OrderDetailID = S.OrderDetailID
+WHEN MATCHED THEN
+    UPDATE
+    SET
+        T.OrderID = S.OrderID,
+        T.ProductID = S.ProductID,
+        T.Quantity = S.Quantity;
